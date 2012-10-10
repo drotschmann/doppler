@@ -153,7 +153,8 @@ class SolrClient(object):
 
     def search(self, querybuilder, callback=None):
         """
-        Search the Solr with `querybuilder.get_params()` as query parameter.
+        Search the Solr using GET with `querybuilder.get_params()` as query
+        parameters.
         """
         query_params = self._get_params(querybuilder)
 
@@ -163,6 +164,20 @@ class SolrClient(object):
         log.debug('Final search URL: %s' % final_url)
 
         self._get(final_url, headers=querybuilder.headers,
+                callback=handle_search_response(querybuilder, callback))
+
+    def post_search(self, querybuilder, callback=None):
+        """
+        Search the Solr using POST with `querybuilder.get_params()` as query
+        parameters.
+        """
+        query_params = self._get_params(querybuilder)
+
+        log.debug('Searching solr with params: %s' % query_params)
+        qs = urllib.urlencode(query_params)
+        log.debug('Final search URL: %s' % self._search_url)
+
+        self._post(self._search_url, qs, headers=querybuilder.headers,
                 callback=handle_search_response(querybuilder, callback))
 
     def more_like_this(self, querybuilder, callback=None, match_include=True,
