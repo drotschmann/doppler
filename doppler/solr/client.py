@@ -163,8 +163,8 @@ class SolrClient(object):
 
         final_url = "?".join([self._search_url, qs])
         # use POST if the final url is very long
-        final_url, use_post = self._search_url, True if len(final_url) > 2000 \
-                                                    else final_url, False
+        final_url, use_post = (self._search_url, True) if len(final_url) > 2000 \
+                                                    else (final_url, False)
         log.debug('Final search URL: %s' % final_url)
 
         if use_post:
