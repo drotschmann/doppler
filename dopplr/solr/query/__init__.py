@@ -26,6 +26,8 @@ from .facets import FacetQueryQuery
 from .facets import MultiselectFacetQuery
 from .facets import RangeFacetQuery
 from .highlighting import Highlighting
+from .join import JoinQuery
+from .join import JoinFilterQuery
 from .mlt import MoreLikeThisQuery
 from .paging import Paging
 from .query import Query, FilterQuery
@@ -39,6 +41,8 @@ __all__ = [
     'FacetFieldQuery',
     'FacetQueryQuery',
     'Highlighting',
+    'JoinQuery',
+    'JoinFilterQuery',
     'MultiselectFacetQuery',
     'RangeFacetQuery',
     'MoreLikeThisQuery',
