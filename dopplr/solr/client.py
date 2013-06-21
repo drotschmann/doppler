@@ -86,11 +86,21 @@ def handle_indexing_response(callback=None):
     in case of success.
     """
     def inner_callback(response):
-        solr = response.body
-        if not solr or "ERROR" in solr:
-            callback({'error': 'not_indexed', 'response': response})
-        else:
-            callback({'ok': True})
+        # since solr 4.X, we can actually json load the response; to remain
+        # backwards compatible, we just add several keys to our response
+        try:
+            solr = json.loads(response.body)
+            if "error" in solr:
+                callback({'error': 'not_indexed', 'reason': solr['error'],
+                    'code': solr["code"], 'response': response})
+                return
+        except TypeError:
+            solr = response.body
+            if not solr or "ERROR" in solr:
+                callback({'error': 'not_indexed', 'response': response})
+                return
+
+        callback({'ok': True})
 
     return inner_callback
 
