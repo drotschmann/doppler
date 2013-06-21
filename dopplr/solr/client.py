@@ -218,7 +218,8 @@ class SolrClient(object):
             callback=handle_suggest_response(querybuilder, callback))
 
     def index_document(self, doc, callback=None, commit=False,
-                       commitWithin=None, overwrite=None, boost=None):
+                       commitWithin=None, softCommit=None, overwrite=None,
+                       boost=None):
         """
         Index a `doc` into Solr. The `callback` will be called from within
         `self._handle_indexing_response`. If `commit is True`, then a `commit`
@@ -242,6 +243,8 @@ class SolrClient(object):
                 params.append(('overwrite', 'false'))
         if commit:
             params.append(('commit', 'true'))
+        if softCommit:
+            params.append(('softCommit', 'true'))
         final_url = '%s?%s' % (self._update_url, urllib.urlencode(params))
 
         self._post(final_url, to_index,
